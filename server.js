@@ -1,6 +1,7 @@
 require("dotenv").config()
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
+const cookieParser = require("cookie-parser")
 const express = require('express')
 const db = require("better-sqlite3")("database.db")
 // Set the journal mode to WAL (Write-Ahead Logging) for better concurrency and performance
@@ -23,9 +24,21 @@ const app = express()
 app.set('view engine', 'ejs')
 app.use(express.urlencoded({ extended: false }))
 app.use(express.static('public'))
+app.use(cookieParser())
 
 app.use(function (req, res, next) {
   res.locals.errors = []
+
+  // try to decode incoming cookie
+  try {
+    const decoded = jwt.verify(req.cookies.WebApp, process.env.JWT_SECRET)
+    req.user = decoded
+  } catch (err) {
+    req.user = false
+  }
+
+  res.locals.user = req.user
+  console.log(req.user)
   next()
 })
 
