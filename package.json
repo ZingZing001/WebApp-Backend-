@@ -11,8 +11,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "better-sqlite3": "^11.8.1",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
-    "nodemon": "^3.1.9"
+    "n": "^10.1.0",
+    "nodemon": "^3.1.9",
+    "stable": "^0.1.8"
   }
 }

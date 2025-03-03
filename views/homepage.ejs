@@ -18,16 +18,24 @@
 
 
   <main>
-    <fieldset>
-      <legend>Register</legend>
-      <label for="username">Username:</label>
-      <input type="text" id="username" name="username" autocomplete="off" required>
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password" autocomplete="off" required>
+    <form action="/register" method="POST">
+      <% errors.forEach(error=> { %>
+        <p class="notice">
+          <%= error %>
+        </p>
+        <% }) %>
 
-      <br />
-      <button type="submit">Register</button>
-    </fieldset>
+          <fieldset>
+            <legend>Register</legend>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" autocomplete="off" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" autocomplete="off" required>
+
+            <br />
+            <button type="submit">Register</button>
+          </fieldset>
+    </form>
   </main>
   <footer>
     <small>&copy; 2025 Backend Practice WebApp</small>
