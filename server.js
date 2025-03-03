@@ -53,6 +53,11 @@ app.get("/login", (req, res) => {
   res.render("login")
 })
 
+app.get("/logout", (req, res) => {
+  res.clearCookie("WebApp")
+  res.redirect("/")
+})
+
 app.post("/register", (req, res) => {
   const errors = []
 

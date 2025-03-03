@@ -1,51 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My 2025 Backend Practice</title>
-  <link rel="stylesheet" href="/styles.css">
-</head>
+<%- include('includes/head') %>
 
-<body>
-  <header>
-    <h2><a href="/">Backend Practice WebApp</a></h2>
-    <nav>
-      <% if (user){ %>
-        <a href="/create-post">Create Post</a>
-        <a href="/logout">Log Out</a>
-        <% } else { %>
-          <a href="/register">Register</a>
-          <% } %>
-    </nav>
-  </header>
+  <body>
+    <%- include('includes/header') %>
+      <main>
+        <form action="/register" method="POST">
+          <% errors.forEach(error=> { %>
+            <p class="notice">
+              <%= error %>
+            </p>
+            <% }) %>
 
+              <fieldset>
+                <legend>Register</legend>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" autocomplete="off" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" autocomplete="off" required>
 
-  <main>
-    <form action="/register" method="POST">
-      <% errors.forEach(error=> { %>
-        <p class="notice">
-          <%= error %>
-        </p>
-        <% }) %>
+                <br />
+                <button type="submit">Register</button>
+              </fieldset>
+        </form>
+      </main>
+      <%- include('includes/footer') %>
 
-          <fieldset>
-            <legend>Register</legend>
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" autocomplete="off" required>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" autocomplete="off" required>
-
-            <br />
-            <button type="submit">Register</button>
-          </fieldset>
-    </form>
-  </main>
-  <footer>
-    <small>&copy; 2025 Backend Practice WebApp</small>
-  </footer>
-
-</body>
+  </body>
 
 </html>
