@@ -43,6 +43,9 @@ app.use(function (req, res, next) {
 })
 
 app.get("/", (req, res) => {
+  if (req.user) {
+    return res.render("dashboard")
+  }
   res.render("homepage")
 })
 
