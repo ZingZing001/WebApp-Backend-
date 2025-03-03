@@ -58,6 +58,56 @@ app.get("/logout", (req, res) => {
   res.redirect("/")
 })
 
+app.post("/login", (req, res) => {
+  let errors = []
+
+  if (typeof req.body.username !== "string") req.body.username = ""
+  if (typeof req.body.password !== "string") req.body.password = ""
+
+  if (req.body.username.trim() == "") errors = ["Invalid username/password"]
+  if (req.body.password == "") errors = ["Invalid username/password"]
+
+
+  if (errors.length) {
+    return res.render("login", { errors })
+  }
+
+  const userInQuestionStatement = db.prepare("SELECT * FROM users WHERE USERNAME = ?")
+
+  const userInQuestion = userInQuestionStatement.get(req.body.username)
+
+  if (!userInQuestion) {
+    return res.render("login", { errors: ["Invalid username/password"] })
+  }
+  const passwordMatch = bcrypt.compareSync(req.body.password, userInQuestion.password)
+
+  if (!passwordMatch) {
+    return res.render("login", { errors: ["Invalid username/password"] })
+  }
+
+  // give the user a cookie
+  const token = jwt.sign(
+    {
+      exp: Math.floor(Date.now() / 1000 + 60 * 60 * 24),
+      skycolour: "blue",
+      ourUser: userInQuestion.id,
+      username: userInQuestion.username
+    },
+    process.env.JWT_SECRET)
+
+  // log the user in by giving them a cookie  
+  res.cookie("WebApp", token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "strict",
+    maxAge: 1000 * 60 * 60 * 24
+  })
+
+  res.redirect("/")
+
+})
+
+
 app.post("/register", (req, res) => {
   const errors = []
 
@@ -105,7 +155,7 @@ app.post("/register", (req, res) => {
     maxAge: 1000 * 60 * 60 * 24
   })
 
-  res.send("You have successfully registered!")
+  res.redirect("/")
 })
 
 app.listen(3000)
