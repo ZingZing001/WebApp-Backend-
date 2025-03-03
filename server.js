@@ -121,6 +121,11 @@ app.post("/register", (req, res) => {
   if (req.body.username && req.body.username.length > 20) errors.push("Username must be at most 20 characters long")
   if (req.body.username && !req.body.username.match(/^[a-zA-Z0-9]+$/)) errors.push("Username can only contain letters and numbers")
 
+  // check if the username is already taken
+  const existingUser = db.prepare("SELECT * FROM users WHERE username = ?").get(req.body.username)
+  if (existingUser) errors.push("Username is already taken")
+
+  if (!req.body.password) errors.push("Password is required")
   if (req.body.password && req.body.password.length < 12) errors.push("Password must be at least 12 characters long")
   if (req.body.password && req.body.password.length > 70) errors.push("Password must be at most 20 characters long")
 
